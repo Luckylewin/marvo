@@ -10,7 +10,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// DriverSurveyController operations for DriverSurvey
+// 数据收集相关API
 type DriverSurveyController struct {
 	beego.Controller
 }
@@ -24,16 +24,9 @@ func (c *DriverSurveyController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description 提交用户填写的调查数据
-// @Param	sexuality	sexuality 	models.sexuality true "调查表单:性别 取值[male|female]"
-// @Param	region	region 	models.region	true "调查表单:地区/国家"
-// @Param	email	email 	models.email	true "调查表单:邮箱"
-// @Param	suggest	suggest models.suggest	false "调查表单:建议"
-// @Param	age		age 	models.age		false "调查表单:年龄"
-// @Param	game	game 	models.game		false "调查表单:游戏名称"
-// @Success 201 成功提交数据到服务
-// @Failure 403 sexuality is empty
-// @Failure 403 region is empty
-// @Failure 403 email is empty
+// @Success 201 {int} models.DriverSurvey
+// @Param	body body models.SurveyForm true	"json数据"
+// @Failure 403 body is empty
 // @router / [post]
 func (c *DriverSurveyController) Post() {
 	var v models.DriverSurvey

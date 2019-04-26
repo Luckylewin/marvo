@@ -1,7 +1,7 @@
 // @APIVersion 1.0.0
-// @Title beego Test API
-// @Description beego has a very cool tools to autogenerate documents for your API
-// @Contact astaxie@gmail.com
+// @Title Marvo Game API
+// @Description Marvo Game 相关的API
+// @Contact 876505905@qq.com
 // @TermsOfServiceUrl http://beego.me/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html

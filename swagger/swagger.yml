@@ -1,11 +1,11 @@
 swagger: "2.0"
 info:
-  title: beego Test API
-  description: beego has a very cool tools to autogenerate documents for your API
+  title: Marvo Game API
+  description: Marvo Game 相关的API
   version: 1.0.0
   termsOfService: http://beego.me/
   contact:
-    email: astaxie@gmail.com
+    email: 876505905@qq.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -18,44 +18,17 @@ paths:
       description: 提交用户填写的调查数据
       operationId: DriverSurveyController.Post
       parameters:
-      - in: sexuality
-        name: sexuality
-        description: 调查表单:性别 取值[male|female]
+      - in: body
+        name: body
+        description: json数据
         required: true
         schema:
-          $ref: '#/definitions/models.sexuality'
-      - in: region
-        name: region
-        description: 调查表单:地区/国家
-        required: true
-        schema:
-          $ref: '#/definitions/models.region'
-      - in: email
-        name: email
-        description: 调查表单:邮箱
-        required: true
-        schema:
-          $ref: '#/definitions/models.email'
-      - in: suggest
-        name: suggest
-        description: 调查表单:建议
-        schema:
-          $ref: '#/definitions/models.suggest'
-      - in: age
-        name: age
-        description: 调查表单:年龄
-        schema:
-          $ref: '#/definitions/models.age'
-      - in: game
-        name: game
-        description: 调查表单:游戏名称
-        schema:
-          $ref: '#/definitions/models.game'
+          $ref: '#/definitions/models.SurveyForm'
       responses:
         "201":
-          description: 成功提交数据到服务
+          description: '{int} models.DriverSurvey'
         "403":
-          description: email is empty
+          description: body is empty
   /driver_survey/{id}:
     get:
       tags:
@@ -100,31 +73,36 @@ definitions:
         description: 地区/国家
         type: string
       Sexuality:
-        description: 0 女 1 男 2保密
+        description: 性别(0女1男2保密)
         type: integer
         format: int32
       Suggest:
         description: 建议
         type: string
-  models.age:
-    title: age
+  models.SurveyForm:
+    title: SurveyForm
     type: object
-  models.email:
-    title: email
-    type: object
-  models.game:
-    title: game
-    type: object
-  models.region:
-    title: region
-    type: object
-  models.sexuality:
-    title: sexuality
-    type: object
-  models.suggest:
-    title: suggest
-    type: object
+    properties:
+      Age:
+        description: 年龄
+        type: string
+      Email:
+        description: 邮箱
+        type: string
+      Game:
+        description: 游戏
+        type: string
+      Region:
+        description: 地区/国家
+        type: string
+      Sexuality:
+        description: 性别(0女1男2保密)
+        type: integer
+        format: int32
+      Suggest:
+        description: 建议
+        type: string
 tags:
 - name: driver_survey
   description: |
-    DriverSurveyController operations for DriverSurvey
+    数据收集相关API

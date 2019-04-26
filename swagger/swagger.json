@@ -99,20 +99,27 @@
                     "type": "integer",
                     "format": "int64"
                 },
+                "Name": {
+                    "description": "年龄",
+                    "type": "string"
+                },
                 "Region": {
                     "description": "地区/国家",
                     "type": "string"
                 },
                 "Sexuality": {
-                    "description": "性别(0女1男2保密)",
-                    "type": "integer",
-                    "format": "int32"
+                    "description": "性别(female|male)",
+                    "type": "string"
                 },
                 "Suggest": {
                     "description": "建议",
                     "type": "string"
                 }
             }
+        },
+        "models.Sexuality": {
+            "title": "Sexuality",
+            "type": "string"
         },
         "models.SurveyForm": {
             "title": "SurveyForm",
@@ -130,14 +137,17 @@
                     "description": "游戏",
                     "type": "string"
                 },
+                "Name": {
+                    "description": "年龄",
+                    "type": "string"
+                },
                 "Region": {
                     "description": "地区/国家",
                     "type": "string"
                 },
                 "Sexuality": {
-                    "description": "性别(0女1男2保密)",
-                    "type": "integer",
-                    "format": "int32"
+                    "$ref": "#/definitions/models.Sexuality",
+                    "description": "性别(female|male)"
                 },
                 "Suggest": {
                     "description": "建议",

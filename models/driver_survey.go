@@ -9,20 +9,24 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+type Sexuality string
+
 type SurveyForm struct {
-	Sexuality int8	 `orm:"column(sexuality);size(10)" description:"性别(0女1男2保密)"`
-	Age       string `orm:"column(age);size(50);null" description:"年龄"`
+	Sexuality Sexuality `orm:"column(sexuality)" description:"性别(female|male)"`
 	Region    string `orm:"column(region);size(255)" description:"地区/国家"`
 	Email     string `orm:"column(email);size(255)" description:"邮箱"`
+	Name      string `orm:"column(name);size(255);" description:"年龄"`
+	Age       string `orm:"column(age);size(50);" description:"年龄"`
 	Suggest   string `orm:"column(suggest);size(1000);null" description:"建议"`
 	Game      string `orm:"column(game);size(255);null" description:"游戏"`
 }
 
 type DriverSurvey struct {
 	Id        int    `orm:"column(id);auto"`
-	Sexuality int8   `orm:"column(sexuality)" description:"性别(0女1男2保密)"`
+	Sexuality string `orm:"column(sexuality)" description:"性别(female|male)"`
 	Region    string `orm:"column(region);size(255)" description:"地区/国家"`
 	Email     string `orm:"column(email);size(255)" description:"邮箱"`
+	Name      string `orm:"column(name);size(255);" description:"年龄"`
 	Age       string `orm:"column(age);size(50);null" description:"年龄"`
 	Suggest   string `orm:"column(suggest);size(1000);null" description:"建议"`
 	Game      string `orm:"column(game);size(255);null" description:"游戏"`

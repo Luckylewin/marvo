@@ -21,12 +21,12 @@
                     "driver_survey"
                 ],
                 "description": "提交用户填写的调查数据",
-                "operationId": "DriverSurveyController.Post",
+                "operationId": "DriverSurveyController.Post提交数据",
                 "parameters": [
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "json数据",
+                        "description": "json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/models.SurveyForm"
@@ -37,90 +37,14 @@
                     "201": {
                         "description": "{int} models.DriverSurvey"
                     },
-                    "403": {
+                    "400": {
                         "description": "body is empty"
-                    }
-                }
-            }
-        },
-        "/driver_survey/{id}": {
-            "get": {
-                "tags": [
-                    "driver_survey"
-                ],
-                "description": "get DriverSurvey by id",
-                "operationId": "DriverSurveyController.Get One",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "description": "The key for staticblock",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/models.DriverSurvey"
-                        }
-                    },
-                    "403": {
-                        "description": ":id is empty"
                     }
                 }
             }
         }
     },
     "definitions": {
-        "models.DriverSurvey": {
-            "title": "DriverSurvey",
-            "type": "object",
-            "properties": {
-                "Age": {
-                    "description": "年龄",
-                    "type": "string"
-                },
-                "CreatedAt": {
-                    "description": "创建时间",
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Email": {
-                    "description": "邮箱",
-                    "type": "string"
-                },
-                "Game": {
-                    "description": "游戏",
-                    "type": "string"
-                },
-                "Id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Name": {
-                    "description": "年龄",
-                    "type": "string"
-                },
-                "Region": {
-                    "description": "地区/国家",
-                    "type": "string"
-                },
-                "Sexuality": {
-                    "description": "性别(female|male)",
-                    "type": "string"
-                },
-                "Suggest": {
-                    "description": "建议",
-                    "type": "string"
-                }
-            }
-        },
-        "models.Sexuality": {
-            "title": "Sexuality",
-            "type": "string"
-        },
         "models.SurveyForm": {
             "title": "SurveyForm",
             "type": "object",
@@ -146,8 +70,12 @@
                     "type": "string"
                 },
                 "Sexuality": {
-                    "$ref": "#/definitions/models.Sexuality",
-                    "description": "性别(female|male)"
+                    "description": "性别(female|male)",
+                    "type": "string"
+                },
+                "Sign": {
+                    "description": "签名",
+                    "type": "string"
                 },
                 "Suggest": {
                     "description": "建议",

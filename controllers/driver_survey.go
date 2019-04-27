@@ -3,10 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"marvoAPI/models"
-	"strconv"
-	
-	//"errors"
-	//"strings"
+	"marvoAPI/libs"
 	"github.com/astaxie/beego"
  	"github.com/astaxie/beego/logs"
  	"github.com/astaxie/beego/validation"
@@ -22,47 +19,48 @@ var SurveyParams map[string]interface{}
 // URLMapping ...
 func (c *DriverSurveyController) URLMapping() {
 	c.Mapping("Post", c.Post)
-	c.Mapping("GetOne", c.GetOne)
 }
 
+
 // Post ...
-// @Title Post
+// @Title Post提交数据
 // @Description 提交用户填写的调查数据
 // @Success 201 {int} models.DriverSurvey
-// @Param	body body models.SurveyForm true	"json数据"
-// @Failure 403 body is empty
+// @Param	body body models.SurveyForm true	"json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest"
+// @Failure 400 body is empty
 // @router / [post]
 func (controller *DriverSurveyController) Post() {
-	log := logs.GetLogger()
-    
+	
 	var v models.DriverSurvey
 	var f models.SurveyForm
 
 	if err := json.Unmarshal(controller.Ctx.Input.RequestBody, &v); err == nil {
-		// 校验数据数据
 		json.Unmarshal(controller.Ctx.Input.RequestBody, &f)
-		validResult, Message := checkFormParams(f)
+		
+		// 检查签名
+    	validateSignResut := validateSign(f)
+		if validateSignResut == false {
+			controller.Ctx.Output.SetStatus(400)
+			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
+			controller.ServeJSON()
+		}
 
-		log.Println("收到的年龄",f.Age)
-		log.Println("收到的名称",f.Name)
-		log.Println("收到的地区",f.Region)
-		log.Println("收到的邮箱",f.Email)
-		log.Println("收到的性别",f.Sexuality)
-
-		log.Println(f)
-		log.Println(validResult,Message)
-
+		// 校验数据数据
+		validResult, Message := validateParams(f)	
 		if validResult == false {
 			controller.Ctx.Output.SetStatus(400)
-			controller.Data["json"] = map[string]interface{}{"status":"1001","test":Message}
-		} else {
-			if _, err := models.AddDriverSurvey(&v); err == nil {
+			controller.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
+			controller.ServeJSON()
+		} 
+
+		// 数据验证通过 写入
+		if _, err := models.AddDriverSurvey(&v); err == nil {
 				controller.Ctx.Output.SetStatus(201)
-				controller.Data["json"] = v
-			} else {
+				controller.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+		} else {
 				controller.Data["json"] = err.Error()
-			}
 		}
+
 	} else {
 		controller.Data["json"] = err.Error()
 	}
@@ -70,7 +68,28 @@ func (controller *DriverSurveyController) Post() {
 	controller.ServeJSON()
 }
 
-func checkFormParams(form models.SurveyForm) (result bool, message string) {
+// 校验Sign
+func validateSign(form models.SurveyForm) bool {
+	raw := make(map[string]interface{})
+	raw ["Sexuality"] = form.Sexuality
+	raw ["Region"] = form.Region
+	raw ["Email"] = form.Email
+	raw ["Name"] = form.Name
+	raw ["Age"] = form.Age
+	raw ["Suggest"] = form.Suggest
+	raw ["Game"] = form.Game
+
+	sign := libs.MakeSignature(raw,beego.AppConfig.String("apiKey"))
+
+	if sign != form.Sign {
+		return false
+	}
+
+	return true
+}
+
+// 校验json里面的字段
+func validateParams(form models.SurveyForm) (result bool, message string) {
 	valid := validation.Validation{}
 	
 	valid.Required(form.Sexuality, "Sexuality")
@@ -95,23 +114,4 @@ func checkFormParams(form models.SurveyForm) (result bool, message string) {
 	}
 
 	return true,"pass"
-}
-
-// GetOne ...
-// @Title Get One
-// @Description get DriverSurvey by id
-// @Param	id		path 	string	true		"The key for staticblock"
-// @Success 200 {object} models.DriverSurvey
-// @Failure 403 :id is empty
-// @router /:id [get]
-func (c *DriverSurveyController) GetOne() {
-	idStr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idStr)
-	v, err := models.GetDriverSurveyById(id)
-	if err != nil {
-		c.Data["json"] = err.Error()
-	} else {
-		c.Data["json"] = v
-	}
-	c.ServeJSON()
 }

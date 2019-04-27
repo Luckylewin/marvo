@@ -9,16 +9,15 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type Sexuality string
-
 type SurveyForm struct {
-	Sexuality Sexuality `orm:"column(sexuality)" description:"性别(female|male)"`
+	Sexuality string `orm:"column(sexuality)" description:"性别(female|male)"`
 	Region    string `orm:"column(region);size(255)" description:"地区/国家"`
 	Email     string `orm:"column(email);size(255)" description:"邮箱"`
 	Name      string `orm:"column(name);size(255);" description:"年龄"`
 	Age       string `orm:"column(age);size(50);" description:"年龄"`
 	Suggest   string `orm:"column(suggest);size(1000);null" description:"建议"`
 	Game      string `orm:"column(game);size(255);null" description:"游戏"`
+	Sign      string `orm:"column(Sign);size(255);null" description:"签名"`
 }
 
 type DriverSurvey struct {

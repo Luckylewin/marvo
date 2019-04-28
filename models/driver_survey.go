@@ -33,7 +33,7 @@ type DriverSurvey struct {
 }
 
 func (t *DriverSurvey) TableName() string {
-	return "driver_survey"
+	return "driver_surveys"
 }
 
 func init() {

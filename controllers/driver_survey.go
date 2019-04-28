@@ -38,11 +38,12 @@ func (controller *DriverSurveyController) Post() {
 		json.Unmarshal(controller.Ctx.Input.RequestBody, &f)
 		
 		// 检查签名
-    	validateSignResut := validateSign(f)
+    		validateSignResut := validateSign(f)
 		if validateSignResut == false {
 			controller.Ctx.Output.SetStatus(400)
 			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
 			controller.ServeJSON()
+			return
 		}
 
 		// 校验数据数据
@@ -51,6 +52,7 @@ func (controller *DriverSurveyController) Post() {
 			controller.Ctx.Output.SetStatus(400)
 			controller.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
 			controller.ServeJSON()
+			return
 		} 
 
 		// 数据验证通过 写入

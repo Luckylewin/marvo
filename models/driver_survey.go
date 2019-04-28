@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-
+	"time"
 	"github.com/astaxie/beego/orm"
 )
 
@@ -29,7 +29,7 @@ type DriverSurvey struct {
 	Age       string `orm:"column(age);size(50);null" description:"年龄"`
 	Suggest   string `orm:"column(suggest);size(1000);null" description:"建议"`
 	Game      string `orm:"column(game);size(255);null" description:"游戏"`
-	CreatedAt int    `orm:"column(created_at);null" description:"创建时间"`
+	CreatedAt int64  `orm:"column(created_at);null" description:"创建时间"`
 }
 
 func (t *DriverSurvey) TableName() string {
@@ -43,6 +43,7 @@ func init() {
 // AddDriverSurvey insert a new DriverSurvey into database and returns
 // last inserted Id on success.
 func AddDriverSurvey(m *DriverSurvey) (id int64, err error) {
+	m.CreatedAt = time.Now().Unix()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return

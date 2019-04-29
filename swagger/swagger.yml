@@ -12,6 +12,55 @@ info:
 basePath: /v1
 paths:
   /driver_survey/:
+    get:
+      tags:
+      - driver_survey
+      description: GET 方式提交数据
+      operationId: DriverSurveyController.GET 方式提交数据
+      parameters:
+      - in: query
+        name: sexuality
+        description: 性别
+        required: true
+        type: string
+      - in: query
+        name: age
+        description: 年龄
+        required: true
+        type: string
+      - in: query
+        name: email
+        description: 邮箱
+        required: true
+        type: string
+      - in: query
+        name: name
+        description: 名称
+        required: true
+        type: string
+      - in: query
+        name: region
+        description: 地区/国家
+        required: true
+        type: string
+      - in: query
+        name: game
+        description: 游戏
+        type: string
+      - in: query
+        name: suggest
+        description: 建议
+        type: string
+      - in: query
+        name: sign
+        description: 签名
+        required: true
+        type: string
+      responses:
+        "201":
+          description: '{int} models.DriverSurvey'
+        "403":
+          description: :sign is empty
     post:
       tags:
       - driver_survey

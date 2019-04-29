@@ -9,6 +9,15 @@ func init() {
 
     beego.GlobalControllerRouter["marvoAPI/controllers:DriverSurveyController"] = append(beego.GlobalControllerRouter["marvoAPI/controllers:DriverSurveyController"],
         beego.ControllerComments{
+            Method: "Submit",
+            Router: `/`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["marvoAPI/controllers:DriverSurveyController"] = append(beego.GlobalControllerRouter["marvoAPI/controllers:DriverSurveyController"],
+        beego.ControllerComments{
             Method: "Post",
             Router: `/`,
             AllowHTTPMethods: []string{"post"},

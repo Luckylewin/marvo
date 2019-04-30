@@ -137,7 +137,7 @@ func (controller *DriverSurveyController) Post() {
 			controller.ServeJSON()
 			return
 		}
-
+		
 		// 校验数据数据
 		validResult, Message := validateParams(f)	
 		if validResult == false {
@@ -165,13 +165,13 @@ func (controller *DriverSurveyController) Post() {
 // 校验Sign
 func validateSign(form models.SurveyForm) bool {
 	raw := make(map[string]interface{})
-	raw ["Sexuality"] = form.Sexuality
-	raw ["Region"] = form.Region
-	raw ["Email"] = form.Email
-	raw ["Name"] = form.Name
-	raw ["Age"] = form.Age
-	raw ["Suggest"] = form.Suggest
-	raw ["Game"] = form.Game
+	raw ["sexuality"] = form.Sexuality
+	raw ["region"] = form.Region
+	raw ["email"] = form.Email
+	raw ["name"] = form.Name
+	raw ["age"] = form.Age
+	raw ["suggest"] = form.Suggest
+	raw ["game"] = form.Game
 
 	sign := libs.MakeSignature(raw,beego.AppConfig.String("apiKey"))
 	
@@ -186,18 +186,18 @@ func validateSign(form models.SurveyForm) bool {
 func validateParams(form models.SurveyForm) (result bool, message string) {
 	valid := validation.Validation{}
 	
-	valid.Required(form.Sexuality, "Sexuality")
-	valid.Required(form.Age, "Age")
-	valid.Required(form.Region, "Region")
-	valid.Required(form.Name, "Name")
-	valid.Required(form.Email, "Email")
+	valid.Required(form.Sexuality, "sexuality")
+	valid.Required(form.Age, "age")
+	valid.Required(form.Region, "region")
+	valid.Required(form.Name, "name")
+	valid.Required(form.Email, "email")
 
-	valid.MaxSize(form.Region,255,"Region")
-	valid.MaxSize(form.Name,255,"Name")
-	valid.MaxSize(form.Email,255,"Email")
-	valid.MaxSize(form.Game,255,"Game")
+	valid.MaxSize(form.Region,255,"region")
+	valid.MaxSize(form.Name,255,"name")
+	valid.MaxSize(form.Email,255,"email")
+	valid.MaxSize(form.Game,255,"game")
 
-	valid.Email(form.Email,"Email")
+	valid.Email(form.Email,"email")
 	
 	log := logs.GetLogger()
 	if valid.HasErrors() {

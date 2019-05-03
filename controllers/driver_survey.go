@@ -39,7 +39,7 @@ func (c *DriverSurveyController) URLMapping() {
 // @Param	suggest		query	string 	false	"建议"
 // @Param	sign		query	string 	true	"签名"
 // @Success 201 {int} models.DriverSurvey
-// @Failure 403 :sign is empty
+// @Failure 200 :sign is empty
 // @router / [get]
 func (controller *DriverSurveyController) Submit() {
 	var f models.SurveyForm
@@ -80,7 +80,6 @@ func (controller *DriverSurveyController) Submit() {
 	// 检查签名
     validateSignResut := validateSign(f)
 	if validateSignResut == false {
-			controller.Ctx.Output.SetStatus(400)
 			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
 			controller.ServeJSON()
 			return
@@ -89,7 +88,6 @@ func (controller *DriverSurveyController) Submit() {
 	// 校验数据数据
 	validResult, Message := validateParams(f)	
 	if validResult == false {
-		controller.Ctx.Output.SetStatus(400)
 		controller.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
 		controller.ServeJSON()
 		return
@@ -119,7 +117,7 @@ func (controller *DriverSurveyController) Submit() {
 // @Description 提交用户填写的调查数据
 // @Success 201 {int} models.DriverSurvey
 // @Param	body body models.SurveyForm true	"json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest"
-// @Failure 400 body is empty
+// @Failure 200 body is empty
 // @router / [post]
 func (controller *DriverSurveyController) Post() {
 	
@@ -132,7 +130,6 @@ func (controller *DriverSurveyController) Post() {
 		// 检查签名
     	validateSignResut := validateSign(f)
 		if validateSignResut == false {
-			controller.Ctx.Output.SetStatus(400)
 			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
 			controller.ServeJSON()
 			return
@@ -141,7 +138,6 @@ func (controller *DriverSurveyController) Post() {
 		// 校验数据数据
 		validResult, Message := validateParams(f)	
 		if validResult == false {
-			controller.Ctx.Output.SetStatus(400)
 			controller.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
 			controller.ServeJSON()
 			return

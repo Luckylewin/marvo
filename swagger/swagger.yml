@@ -44,6 +44,11 @@ paths:
         required: true
         type: string
       - in: query
+        name: types
+        description: 型号
+        required: true
+        type: string
+      - in: query
         name: game
         description: 游戏
         type: string
@@ -52,15 +57,19 @@ paths:
         description: 建议
         type: string
       - in: query
+        name: facebook
+        description: facebook
+        type: string
+      - in: query
         name: sign
         description: 签名
         required: true
         type: string
       responses:
+        "200":
+          description: :sign is empty
         "201":
           description: '{int} models.DriverSurvey'
-        "403":
-          description: :sign is empty
     post:
       tags:
       - driver_survey
@@ -69,15 +78,15 @@ paths:
       parameters:
       - in: body
         name: body
-        description: json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest
+        description: json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook
         required: true
         schema:
           $ref: '#/definitions/models.SurveyForm'
       responses:
+        "200":
+          description: body is empty
         "201":
           description: '{int} models.DriverSurvey'
-        "400":
-          description: body is empty
 definitions:
   models.SurveyForm:
     title: SurveyForm
@@ -88,6 +97,9 @@ definitions:
         type: string
       Email:
         description: 邮箱
+        type: string
+      Facebook:
+        description: facebook
         type: string
       Game:
         description: 游戏
@@ -106,6 +118,9 @@ definitions:
         type: string
       Suggest:
         description: 建议
+        type: string
+      Types:
+        description: 型号
         type: string
 tags:
 - name: driver_survey

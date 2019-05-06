@@ -17,6 +17,8 @@ type SurveyForm struct {
 	Age       string `orm:"column(age);size(50);" description:"年龄"`
 	Suggest   string `orm:"column(suggest);size(1000);null" description:"建议"`
 	Game      string `orm:"column(game);size(255);null" description:"游戏"`
+	Types     string `orm:"column(types);size(255);null" description:"型号"`
+	Facebook  string `orm:"column(facebook);size(255);null" description:"facebook"`
 	Sign      string `orm:"column(Sign);size(255);null" description:"签名"`
 }
 
@@ -29,6 +31,8 @@ type DriverSurvey struct {
 	Age       string `orm:"column(age);size(50);null" description:"年龄"`
 	Suggest   string `orm:"column(suggest);size(1000);null" description:"建议"`
 	Game      string `orm:"column(game);size(255);null" description:"游戏"`
+	Types     string `orm:"column(types);size(255);null" description:"型号"`
+	Facebook  string `orm:"column(facebook);size(255);null" description:"facebook"`
 	CreatedAt int64  `orm:"column(created_at);null" description:"创建时间"`
 }
 

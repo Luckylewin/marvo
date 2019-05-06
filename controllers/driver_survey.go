@@ -31,12 +31,14 @@ func (c *DriverSurveyController) URLMapping() {
 // @Title GET 方式提交数据
 // @Description GET 方式提交数据
 // @Param	sexuality	query	string 	true	"性别"
-// @Param	age			query	string 	true	"年龄"
+// @Param	age		query	string 	true	"年龄"
 // @Param	email		query	string 	true	"邮箱"
 // @Param	name		query	string 	true	"名称"
 // @Param	region		query	string 	true	"地区/国家"
+// @Param	types		query	string 	true	"型号"
 // @Param	game		query	string 	false	"游戏"
 // @Param	suggest		query	string 	false	"建议"
+// @Param	facebook	query	string 	false	"facebook"
 // @Param	sign		query	string 	true	"签名"
 // @Success 201 {int} models.DriverSurvey
 // @Failure 200 :sign is empty
@@ -73,12 +75,20 @@ func (controller *DriverSurveyController) Submit() {
 	controller.Ctx.Input.Bind(&suggest, "suggest")  
 	f.Suggest = suggest
 
+	var types string
+	controller.Ctx.Input.Bind(&types, "types")  
+	f.Types = types
+	
+	var facebook string
+	controller.Ctx.Input.Bind(&facebook, "facebook")  
+	f.Facebook = facebook
+
 	var sign string
 	controller.Ctx.Input.Bind(&sign, "sign")  
 	f.Sign = sign
 
 	// 检查签名
-    validateSignResut := validateSign(f)
+ 	validateSignResut := validateSign(f)
 	if validateSignResut == false {
 			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
 			controller.ServeJSON()
@@ -100,7 +110,9 @@ func (controller *DriverSurveyController) Submit() {
 	v.Suggest 	= f.Suggest 	
 	v.Game 		= f.Game 		
 	v.Age 		= f.Age 		
-	
+	v.Types         = f.Types
+	v.Facebook      = f.Facebook
+
 	// 数据验证通过 写入
 	if _, err := models.AddDriverSurvey(&v); err == nil {
 			controller.Ctx.Output.SetStatus(201)
@@ -116,7 +128,7 @@ func (controller *DriverSurveyController) Submit() {
 // @Title Post提交数据
 // @Description 提交用户填写的调查数据
 // @Success 201 {int} models.DriverSurvey
-// @Param	body body models.SurveyForm true	"json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest"
+// @Param	body body models.SurveyForm true	"json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook"
 // @Failure 200 body is empty
 // @router / [post]
 func (controller *DriverSurveyController) Post() {
@@ -127,7 +139,7 @@ func (controller *DriverSurveyController) Post() {
 	if err := json.Unmarshal(controller.Ctx.Input.RequestBody, &v); err == nil {
 		json.Unmarshal(controller.Ctx.Input.RequestBody, &f)
 		
-		// 检查签名
+	// 检查签名
     	validateSignResut := validateSign(f)
 		if validateSignResut == false {
 			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
@@ -168,7 +180,9 @@ func validateSign(form models.SurveyForm) bool {
 	raw ["age"] = form.Age
 	raw ["suggest"] = form.Suggest
 	raw ["game"] = form.Game
-
+	raw ["types"] = form.Types
+	raw ["facebook"] = form.Facebook
+	
 	sign := libs.MakeSignature(raw,beego.AppConfig.String("apiKey"))
 	
 	if sign != form.Sign {
@@ -187,11 +201,14 @@ func validateParams(form models.SurveyForm) (result bool, message string) {
 	valid.Required(form.Region, "region")
 	valid.Required(form.Name, "name")
 	valid.Required(form.Email, "email")
+	valid.Required(form.Types, "types")
 
 	valid.MaxSize(form.Region,255,"region")
 	valid.MaxSize(form.Name,255,"name")
 	valid.MaxSize(form.Email,255,"email")
 	valid.MaxSize(form.Game,255,"game")
+	valid.MaxSize(form.Types,255,"types")
+	valid.MaxSize(form.Facebook,255,"facebook")
 
 	valid.Email(form.Email,"email")
 	

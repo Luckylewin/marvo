@@ -11,7 +11,7 @@ import (
 
 type SurveyForm struct {
 	Sexuality string `orm:"column(sexuality)" description:"性别(female|male)"`
-	Region    string `orm:"column(region);size(255)" description:"地区/国家"`
+	Area      string `orm:"column(area);size(255)" description:"地区/国家"`
 	Email     string `orm:"column(email);size(255)" description:"邮箱"`
 	Name      string `orm:"column(name);size(255);" description:"年龄"`
 	Age       string `orm:"column(age);size(50);" description:"年龄"`
@@ -25,7 +25,7 @@ type SurveyForm struct {
 type DriverSurvey struct {
 	Id        int    `orm:"column(id);auto"`
 	Sexuality string `orm:"column(sexuality)" description:"性别(female|male)"`
-	Region    string `orm:"column(region);size(255)" description:"地区/国家"`
+	Area      string `orm:"column(area);size(255)" description:"地区/国家"`
 	Email     string `orm:"column(email);size(255)" description:"邮箱"`
 	Name      string `orm:"column(name);size(255);" description:"年龄"`
 	Age       string `orm:"column(age);size(50);null" description:"年龄"`

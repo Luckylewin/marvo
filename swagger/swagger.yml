@@ -39,7 +39,7 @@ paths:
         required: true
         type: string
       - in: query
-        name: region
+        name: area
         description: 地区/国家
         required: true
         type: string
@@ -78,7 +78,7 @@ paths:
       parameters:
       - in: body
         name: body
-        description: json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook
+        description: json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Area,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook
         required: true
         schema:
           $ref: '#/definitions/models.SurveyForm'
@@ -95,6 +95,9 @@ definitions:
       Age:
         description: 年龄
         type: string
+      Area:
+        description: 地区/国家
+        type: string
       Email:
         description: 邮箱
         type: string
@@ -106,9 +109,6 @@ definitions:
         type: string
       Name:
         description: 年龄
-        type: string
-      Region:
-        description: 地区/国家
         type: string
       Sexuality:
         description: 性别(female|male)

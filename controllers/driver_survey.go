@@ -34,7 +34,7 @@ func (c *DriverSurveyController) URLMapping() {
 // @Param	age		query	string 	true	"年龄"
 // @Param	email		query	string 	true	"邮箱"
 // @Param	name		query	string 	true	"名称"
-// @Param	region		query	string 	true	"地区/国家"
+// @Param	area		query	string 	true	"地区/国家"
 // @Param	types		query	string 	true	"型号"
 // @Param	game		query	string 	false	"游戏"
 // @Param	suggest		query	string 	false	"建议"
@@ -55,9 +55,9 @@ func (controller *DriverSurveyController) Submit() {
 	controller.Ctx.Input.Bind(&age, "age")  
 	f.Age = age
 
-	var region string
-	controller.Ctx.Input.Bind(&region, "region")
-	f.Region = region
+	var area string
+	controller.Ctx.Input.Bind(&area, "area")
+	f.Area = area
 
 	var email string
 	controller.Ctx.Input.Bind(&email, "email")  
@@ -104,7 +104,7 @@ func (controller *DriverSurveyController) Submit() {
 	} 
 
 	v.Sexuality = f.Sexuality 
-	v.Region 	= f.Region 	
+	v.Area 		= f.Area 	
 	v.Email 	= f.Email	
 	v.Name 		= f.Name	
 	v.Suggest 	= f.Suggest 	
@@ -128,7 +128,7 @@ func (controller *DriverSurveyController) Submit() {
 // @Title Post提交数据
 // @Description 提交用户填写的调查数据
 // @Success 201 {int} models.DriverSurvey
-// @Param	body body models.SurveyForm true	"json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Region,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook"
+// @Param	body body models.SurveyForm true	"json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Area,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook"
 // @Failure 200 body is empty
 // @router / [post]
 func (controller *DriverSurveyController) Post() {
@@ -174,7 +174,7 @@ func (controller *DriverSurveyController) Post() {
 func validateSign(form models.SurveyForm) bool {
 	raw := make(map[string]interface{})
 	raw ["sexuality"] = form.Sexuality
-	raw ["region"] = form.Region
+	raw ["area"] = form.Area
 	raw ["email"] = form.Email
 	raw ["name"] = form.Name
 	raw ["age"] = form.Age
@@ -198,12 +198,12 @@ func validateParams(form models.SurveyForm) (result bool, message string) {
 	
 	valid.Required(form.Sexuality, "sexuality")
 	valid.Required(form.Age, "age")
-	valid.Required(form.Region, "region")
+	valid.Required(form.Area, "area")
 	valid.Required(form.Name, "name")
 	valid.Required(form.Email, "email")
 	valid.Required(form.Types, "types")
 
-	valid.MaxSize(form.Region,255,"region")
+	valid.MaxSize(form.Area,255,"area")
 	valid.MaxSize(form.Name,255,"name")
 	valid.MaxSize(form.Email,255,"email")
 	valid.MaxSize(form.Game,255,"game")

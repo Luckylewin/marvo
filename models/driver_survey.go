@@ -10,6 +10,7 @@ import (
 )
 
 type SurveyForm struct {
+	Mac 	  string `orm:"column(mac)" description:"mac地址"`
 	Sexuality string `orm:"column(sexuality)" description:"性别(female|male)"`
 	Area      string `orm:"column(area);size(255)" description:"地区/国家"`
 	Email     string `orm:"column(email);size(255)" description:"邮箱"`
@@ -24,6 +25,7 @@ type SurveyForm struct {
 
 type DriverSurvey struct {
 	Id        int    `orm:"column(id);auto"`
+	Mac 	  string `orm:"column(mac)" description:"mac地址"`
 	Sexuality string `orm:"column(sexuality)" description:"性别(female|male)"`
 	Area      string `orm:"column(area);size(255)" description:"地区/国家"`
 	Email     string `orm:"column(email);size(255)" description:"邮箱"`
@@ -34,6 +36,7 @@ type DriverSurvey struct {
 	Types     string `orm:"column(types);size(255);null" description:"型号"`
 	Facebook  string `orm:"column(facebook);size(255);null" description:"facebook"`
 	CreatedAt int64  `orm:"column(created_at);null" description:"创建时间"`
+	UpdatedAt int64  `orm:"column(updated_at);null" description:"更新时间"`
 }
 
 func (t *DriverSurvey) TableName() string {
@@ -48,6 +51,7 @@ func init() {
 // last inserted Id on success.
 func AddDriverSurvey(m *DriverSurvey) (id int64, err error) {
 	m.CreatedAt = time.Now().Unix()
+	m.UpdatedAt = time.Now().Unix()
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return

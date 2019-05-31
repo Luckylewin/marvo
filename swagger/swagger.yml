@@ -19,6 +19,11 @@ paths:
       operationId: DriverSurveyController.GET 方式提交数据
       parameters:
       - in: query
+        name: mac
+        description: mac
+        required: true
+        type: string
+      - in: query
         name: sexuality
         description: 性别
         required: true
@@ -78,7 +83,7 @@ paths:
       parameters:
       - in: body
         name: body
-        description: json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Area,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook
+        description: json格式，包含项Mac地址:Mac,年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Area,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook
         required: true
         schema:
           $ref: '#/definitions/models.SurveyForm'
@@ -106,6 +111,9 @@ definitions:
         type: string
       Game:
         description: 游戏
+        type: string
+      Mac:
+        description: mac地址
         type: string
       Name:
         description: 年龄

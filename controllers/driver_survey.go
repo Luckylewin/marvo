@@ -30,6 +30,7 @@ func (c *DriverSurveyController) URLMapping() {
 // Submit ...
 // @Title GET 方式提交数据
 // @Description GET 方式提交数据
+// @Param	mac		query	string 	true	"mac"
 // @Param	sexuality	query	string 	true	"性别"
 // @Param	age		query	string 	true	"年龄"
 // @Param	email		query	string 	true	"邮箱"
@@ -46,6 +47,10 @@ func (c *DriverSurveyController) URLMapping() {
 func (controller *DriverSurveyController) Submit() {
 	var f models.SurveyForm
 	var v models.DriverSurvey
+
+	var mac string
+	controller.Ctx.Input.Bind(&mac, "mac")  
+	f.Mac = mac
 
 	var sexuality string
 	controller.Ctx.Input.Bind(&sexuality, "sexuality")  
@@ -103,7 +108,8 @@ func (controller *DriverSurveyController) Submit() {
 		return
 	} 
 
-	v.Sexuality = f.Sexuality 
+	v.Mac 		= f.Mac
+	v.Sexuality 	= f.Sexuality 
 	v.Area 		= f.Area 	
 	v.Email 	= f.Email	
 	v.Name 		= f.Name	
@@ -128,7 +134,7 @@ func (controller *DriverSurveyController) Submit() {
 // @Title Post提交数据
 // @Description 提交用户填写的调查数据
 // @Success 201 {int} models.DriverSurvey
-// @Param	body body models.SurveyForm true	"json格式，包含项年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Area,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook"
+// @Param	body body models.SurveyForm true	"json格式，包含项Mac地址:Mac,年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Area,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook"
 // @Failure 200 body is empty
 // @router / [post]
 func (controller *DriverSurveyController) Post() {
@@ -173,6 +179,7 @@ func (controller *DriverSurveyController) Post() {
 // 校验Sign
 func validateSign(form models.SurveyForm) bool {
 	raw := make(map[string]interface{})
+	raw ["mac"] = form.Mac
 	raw ["sexuality"] = form.Sexuality
 	raw ["area"] = form.Area
 	raw ["email"] = form.Email
@@ -196,6 +203,7 @@ func validateSign(form models.SurveyForm) bool {
 func validateParams(form models.SurveyForm) (result bool, message string) {
 	valid := validation.Validation{}
 	
+	valid.Required(form.Mac, "mac")
 	valid.Required(form.Sexuality, "sexuality")
 	valid.Required(form.Age, "age")
 	valid.Required(form.Area, "area")

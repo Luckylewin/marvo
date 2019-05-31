@@ -44,90 +44,105 @@ func (c *DriverSurveyController) URLMapping() {
 // @Success 201 {int} models.DriverSurvey
 // @Failure 200 :sign is empty
 // @router / [get]
-func (controller *DriverSurveyController) Submit() {
+func (c *DriverSurveyController) Submit() {
 	var f models.SurveyForm
 	var v models.DriverSurvey
 
 	var mac string
-	controller.Ctx.Input.Bind(&mac, "mac")  
+	c.Ctx.Input.Bind(&mac, "mac")  
 	f.Mac = mac
 
 	var sexuality string
-	controller.Ctx.Input.Bind(&sexuality, "sexuality")  
+	c.Ctx.Input.Bind(&sexuality, "sexuality")  
 	f.Sexuality = sexuality
 
 	var age string
-	controller.Ctx.Input.Bind(&age, "age")  
+	c.Ctx.Input.Bind(&age, "age")  
 	f.Age = age
 
 	var area string
-	controller.Ctx.Input.Bind(&area, "area")
+	c.Ctx.Input.Bind(&area, "area")
 	f.Area = area
 
 	var email string
-	controller.Ctx.Input.Bind(&email, "email")  
+	c.Ctx.Input.Bind(&email, "email")  
 	f.Email = email
 
 	var name string
-	controller.Ctx.Input.Bind(&name, "name")  
+	c.Ctx.Input.Bind(&name, "name")  
 	f.Name = name
 
 	var game string
-	controller.Ctx.Input.Bind(&game, "game") 
+	c.Ctx.Input.Bind(&game, "game") 
 	f.Game = game
 
 	var suggest string
-	controller.Ctx.Input.Bind(&suggest, "suggest")  
+	c.Ctx.Input.Bind(&suggest, "suggest")  
 	f.Suggest = suggest
 
 	var types string
-	controller.Ctx.Input.Bind(&types, "types")  
+	c.Ctx.Input.Bind(&types, "types")  
 	f.Types = types
 	
 	var facebook string
-	controller.Ctx.Input.Bind(&facebook, "facebook")  
+	c.Ctx.Input.Bind(&facebook, "facebook")  
 	f.Facebook = facebook
 
 	var sign string
-	controller.Ctx.Input.Bind(&sign, "sign")  
+	c.Ctx.Input.Bind(&sign, "sign")  
 	f.Sign = sign
 
 	// 检查签名
  	validateSignResut := validateSign(f)
 	if validateSignResut == false {
-			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
-			controller.ServeJSON()
+			c.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
+			c.ServeJSON()
 			return
 	}
 
 	// 校验数据数据
 	validResult, Message := validateParams(f)	
 	if validResult == false {
-		controller.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
-		controller.ServeJSON()
+		c.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
+		c.ServeJSON()
 		return
 	} 
 
 	v.Mac 		= f.Mac
-	v.Sexuality 	= f.Sexuality 
+	v.Sexuality = f.Sexuality 
 	v.Area 		= f.Area 	
 	v.Email 	= f.Email	
 	v.Name 		= f.Name	
 	v.Suggest 	= f.Suggest 	
 	v.Game 		= f.Game 		
 	v.Age 		= f.Age 		
-	v.Types         = f.Types
-	v.Facebook      = f.Facebook
+	v.Types     = f.Types
+	v.Facebook  = f.Facebook
 
-	// 数据验证通过 写入
-	if _, err := models.AddDriverSurvey(&v); err == nil {
-			controller.Ctx.Output.SetStatus(201)
-			controller.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+	// 先判断一下这条数据是否存在
+	if item, err := models.GetDriverSurveyByMac(v.Mac); err == nil {
+			// 判断是否有更新数据
+			if isNeedUpdate(f,item) {
+				v.Id = item.Id
+				if err := models.UpdateDriverSurveyById(&v); err == nil {
+					c.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+				} else {
+					c.Data["json"] = map[string]interface{}{"status":"1003","message":"update fail"}
+				}
+			} else {
+				c.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+			}
 	} else {
-			controller.Data["json"] = err.Error()
-	} 		
+		// 不存在则新增
+		if _, err := models.AddDriverSurvey(&v); err == nil {
+				c.Ctx.Output.SetStatus(201)
+				c.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+		} else {
+				c.Data["json"] = err.Error()
+		} 			
+	} 	
 
-	controller.ServeJSON()
+	c.ServeJSON()
 }
 
 // Post ...
@@ -137,43 +152,75 @@ func (controller *DriverSurveyController) Submit() {
 // @Param	body body models.SurveyForm true	"json格式，包含项Mac地址:Mac,年龄:Age,邮箱:Email,游戏:Game,名称:Name,地区/国家:Area,性别:Sexuality,签名:Sign,建议:Suggest,型号:Types,脸书:facebook"
 // @Failure 200 body is empty
 // @router / [post]
-func (controller *DriverSurveyController) Post() {
+func (c *DriverSurveyController) Post() {
 	
 	var v models.DriverSurvey
 	var f models.SurveyForm
 
-	if err := json.Unmarshal(controller.Ctx.Input.RequestBody, &v); err == nil {
-		json.Unmarshal(controller.Ctx.Input.RequestBody, &f)
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		json.Unmarshal(c.Ctx.Input.RequestBody, &f)
 		
 	// 检查签名
     	validateSignResut := validateSign(f)
 		if validateSignResut == false {
-			controller.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
-			controller.ServeJSON()
+			c.Data["json"] = map[string]interface{}{"status":"1001","message":"invalid sign"}
+			c.ServeJSON()
 			return
 		}
 		
 		// 校验数据数据
 		validResult, Message := validateParams(f)	
 		if validResult == false {
-			controller.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
-			controller.ServeJSON()
+			c.Data["json"] = map[string]interface{}{"status":"1002","message":Message}
+			c.ServeJSON()
 			return
 		} 
 
-		// 数据验证通过 写入
-		if _, err := models.AddDriverSurvey(&v); err == nil {
-				controller.Ctx.Output.SetStatus(201)
-				controller.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+		// 先判断一下这条数据是否存在
+		if item, err := models.GetDriverSurveyByMac(v.Mac); err == nil {
+				// 判断是否有更新数据
+				if isNeedUpdate(f,item) {
+					v.Id = item.Id
+					if err := models.UpdateDriverSurveyById(&v); err == nil {
+						c.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+					} else {
+						c.Data["json"] = map[string]interface{}{"status":"1003","message":"update fail"}
+					}
+				} else {
+					c.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+				}
 		} else {
-				controller.Data["json"] = err.Error()
+				// 数据验证通过 写入
+			if _, err := models.AddDriverSurvey(&v); err == nil {
+					c.Ctx.Output.SetStatus(201)
+					c.Data["json"] = map[string]interface{}{"status":"1000","message":"success"}
+			} else {
+					c.Data["json"] = err.Error()
+			}
 		}
 
 	} else {
-		controller.Data["json"] = err.Error()
+		c.Data["json"] = err.Error()
 	}
 
-	controller.ServeJSON()
+	c.ServeJSON()
+}
+
+// 判断是否有更新数据
+func isNeedUpdate(form models.SurveyForm, object *models.DriverSurvey) bool {
+	changeFlag := false
+	if object.Area != form.Area  ||
+	   object.Sexuality != form.Sexuality || 
+	   object.Email != form.Email || 
+	   object.Name != form.Name || 
+	   object.Suggest != form.Suggest || 
+	   object.Game != form.Game ||
+	   object.Facebook != form.Facebook ||
+	   object.Age != form.Age {
+		return true
+	}
+	
+	return changeFlag
 }
 
 // 校验Sign
@@ -211,6 +258,7 @@ func validateParams(form models.SurveyForm) (result bool, message string) {
 	valid.Required(form.Email, "email")
 	valid.Required(form.Types, "types")
 
+	valid.MaxSize(form.Mac,64,"mac")
 	valid.MaxSize(form.Area,255,"area")
 	valid.MaxSize(form.Name,255,"name")
 	valid.MaxSize(form.Email,255,"email")

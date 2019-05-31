@@ -68,6 +68,17 @@ func GetDriverSurveyById(id int) (v *DriverSurvey, err error) {
 	return nil, err
 }
 
+// GetDriverSurveyByMac retrieves DriverSurvey by Mac. Returns true if Mac doesn't exist
+func GetDriverSurveyByMac(mac string) (*DriverSurvey,error) {
+	survey := new(DriverSurvey)
+	o := orm.NewOrm()
+    err := o.QueryTable("driver_surveys").Filter("mac", mac).One(survey)
+    if err != nil {
+        return nil, err
+    }
+    return survey, nil
+}
+
 // GetAllDriverSurvey retrieves all DriverSurvey matches certain condition. Returns empty list if
 // no records exist
 func GetAllDriverSurvey(query map[string]string, fields []string, sortby []string, order []string,

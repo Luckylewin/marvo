@@ -731,6 +731,13 @@ blockquote {
 </thead>
 <tbody>
 <tr>
+<td>mac</td>
+<td style="text-align:center">mac地址</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">Y</td>
+<td style="text-align:right">female/male，最大长度64字符，大于返回1002</td>
+</tr>
+<tr>
 <td>sexuality</td>
 <td style="text-align:center">性别</td>
 <td style="text-align:center">string</td>
@@ -804,57 +811,61 @@ blockquote {
 </table>
 <h3 id="4-">4) 请求示例:</h3>
 <p><strong>1）<code>GET</code> 请求示例</strong></p>
-<pre><code><span class="hljs-symbol">http:</span>/<span class="hljs-regexp">/118.24.105.214:8080/v</span>1/driver_survey/?age=<span class="hljs-number">20</span>&amp;email=test2019<span class="hljs-variable">@gmail</span>.com&amp;facebook=<span class="hljs-symbol">https:</span>/<span class="hljs-regexp">/www.facebook.com/</span><span class="hljs-constant">Aaron</span>&amp;game=<span class="hljs-constant">LOL</span>&amp;name=<span class="hljs-constant">Aaron</span>&amp;area=<span class="hljs-constant">America</span>&amp;sexuality=male&amp;suggest=test drive develop&amp;types=<span class="hljs-constant">G23</span>&amp;sign=<span class="hljs-number">9</span>db91116beaec4e3f53818b7d9338663
+<pre><code><span class="hljs-symbol">http:</span>/<span class="hljs-regexp">/118.24.105.214:8080/v</span>1/driver_survey/?age=<span class="hljs-number">20</span>&amp;area=<span class="hljs-constant">China</span>&amp;email=test2019<span class="hljs-variable">@gmail</span>.com&amp;facebook=<span class="hljs-symbol">https:</span>/<span class="hljs-regexp">/www.facebook.com/</span><span class="hljs-constant">Aaron</span>&amp;game=<span class="hljs-constant">NBA2K18</span>&amp;mac=<span class="hljs-number">00016</span>C06A629&amp;name=<span class="hljs-constant">Aaron</span>&amp;sexuality=male&amp;suggest=test drive develop&amp;types=<span class="hljs-constant">G23</span>&amp;sign=ccbb6149af23fb96d4ce530833aaa4d7
 </code></pre><p><strong>2) <code>POST</code> 请求示例（application/json）</strong></p>
 <pre><code>{
-  "<span class="hljs-attribute">age</span>": <span class="hljs-value"><span class="hljs-string">"20"</span></span>,
-  "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"test2019@gmail.com"</span></span>,
-  "<span class="hljs-attribute">facebook</span>":<span class="hljs-value"><span class="hljs-string">"https://www.facebook.com/Aaron"</span></span>,
-  "<span class="hljs-attribute">game</span>": <span class="hljs-value"><span class="hljs-string">"LOL"</span></span>,
-  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Aaron"</span></span>,
-  "<span class="hljs-attribute">area</span>": <span class="hljs-value"><span class="hljs-string">"America"</span></span>,
-  "<span class="hljs-attribute">sexuality</span>": <span class="hljs-value"><span class="hljs-string">"male"</span></span>,
-  "<span class="hljs-attribute">sign</span>": <span class="hljs-value"><span class="hljs-string">"9db91116beaec4e3f53818b7d9338663"</span></span>,
-  "<span class="hljs-attribute">suggest</span>": <span class="hljs-value"><span class="hljs-string">"test drive develop"</span></span>,
-  "<span class="hljs-attribute">types</span>" : <span class="hljs-value"><span class="hljs-string">"G23"</span>
+    "<span class="hljs-attribute">mac</span>":<span class="hljs-value"><span class="hljs-string">"00016C06A629"</span></span>,
+    "<span class="hljs-attribute">sexuality</span>":<span class="hljs-value"><span class="hljs-string">"male"</span></span>,
+    "<span class="hljs-attribute">age</span>":<span class="hljs-value"><span class="hljs-string">"20"</span></span>,
+    "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Aaron"</span></span>,
+    "<span class="hljs-attribute">area</span>":<span class="hljs-value"><span class="hljs-string">"China"</span></span>,
+    "<span class="hljs-attribute">email</span>":<span class="hljs-value"><span class="hljs-string">"test2019@gmail.com"</span></span>,
+    "<span class="hljs-attribute">game</span>":<span class="hljs-value"><span class="hljs-string">"NBA2K18"</span></span>,
+    "<span class="hljs-attribute">suggest</span>":<span class="hljs-value"><span class="hljs-string">"test drive develop"</span></span>,
+    "<span class="hljs-attribute">facebook</span>":<span class="hljs-value"><span class="hljs-string">"https://www.facebook.com/Aaron"</span></span>,
+    "<span class="hljs-attribute">types</span>":<span class="hljs-value"><span class="hljs-string">"G23"</span></span>,
+    "<span class="hljs-attribute">sign</span>":<span class="hljs-value"><span class="hljs-string">"ccbb6149af23fb96d4ce530833aaa4d7"</span>
 </span>}
 </code></pre><h3 id="4-sign-">4) <code>Sign</code> 签名生成:</h3>
 <p>假设发送的数据的数据为</p>
-<pre><code><span class="hljs-attribute">sexuality</span>: <span class="hljs-string">male,</span>
-<span class="hljs-attribute">age</span>: <span class="hljs-string">20,</span>
-<span class="hljs-attribute">name</span>: <span class="hljs-string">Aaron,</span>
-<span class="hljs-attribute">area</span>: <span class="hljs-string">America,</span>
-<span class="hljs-attribute">email</span>: <span class="hljs-string">test2019@gmail.com,</span>
-<span class="hljs-attribute">game</span>: <span class="hljs-string">LOL,</span>
-<span class="hljs-attribute">suggest</span>: <span class="hljs-string">test drive develop,</span>
-<span class="hljs-attribute">facebook</span>: <span class="hljs-string">https://www.facebook.com/Aaron</span>
-<span class="hljs-attribute">types</span>: <span class="hljs-string">G23</span>
-</code></pre><p><strong>1) 第一步: </strong>对参数按照key=value的格式，按照参数名<code>ASCII 字典序</code>排序，并使用<code>&amp;</code>拼接起来：</p>
-<pre><code>age=<span class="hljs-number">20</span>&amp;area=America&amp;email=test2019<span class="hljs-annotation">@gmail</span>.com&amp;facebook=https:<span class="hljs-comment">//www.facebook.com/Aaron&amp;game=LOL&amp;name=Aaron&amp;sexuality=male&amp;suggest=test drive develop&amp;types=G23</span>
+<pre><code> <span class="hljs-string">"mac"</span>:<span class="hljs-string">"00016C06A629"</span>,
+ <span class="hljs-string">"sexuality"</span>:<span class="hljs-string">"male"</span>,
+ <span class="hljs-string">"age"</span>:<span class="hljs-number">20</span>,
+ <span class="hljs-string">"name"</span>:<span class="hljs-string">"Aaron"</span>,
+ <span class="hljs-string">"area"</span>:<span class="hljs-string">"China"</span>,
+ <span class="hljs-string">"email"</span>:<span class="hljs-string">"test2019<span class="hljs-variable">@gmail</span>.com"</span>,
+ <span class="hljs-string">"game"</span>:<span class="hljs-string">"NBA2K18"</span>,
+ <span class="hljs-string">"suggest"</span>:<span class="hljs-string">"test drive develop"</span>,
+ <span class="hljs-string">"facebook"</span>:<span class="hljs-string">"https://www.facebook.com/Aaron"</span>,
+ <span class="hljs-string">"types"</span>:<span class="hljs-string">"G23"</span>,
+ <span class="hljs-string">"sign"</span>:<span class="hljs-string">"ccbb6149af23fb96d4ce530833aaa4d7"</span>
+</code></pre><p><strong>1) 第一步: </strong>对参数按照key=value的格式，按照参数名<code>ASCII 字典序顺序</code>排序，并使用<code>&amp;</code>拼接起来：(即按照A-Za-z排序，相同时按后面的字母字典序排序,如aac 和 aab 则 aab在前面，aac在后面 )</p>
+<pre><code>age=<span class="hljs-number">20</span>&amp;area=China&amp;email=test2019<span class="hljs-annotation">@gmail</span>.com&amp;facebook=https:<span class="hljs-comment">//www.facebook.com/Aaron&amp;game=NBA2K18&amp;mac=00016C06A629&amp;name=Aaron&amp;sexuality=male&amp;suggest=test drive develop&amp;types=G23</span>
 </code></pre><p><code>注意</code>：如果字段为<code>空</code>，则<code>不进行</code>拼接，假设 Game 与 Suggest，facebook 为空 则</p>
-<pre><code><span class="hljs-setting">age=<span class="hljs-value"><span class="hljs-number">20</span>&amp;email=test2019@gmail.com&amp;name=Aaron&amp;area=America&amp;sexuality=male&amp;types=G23</span></span>
+<pre><code><span class="hljs-setting">age=<span class="hljs-value"><span class="hljs-number">20</span>&amp;area=China&amp;email=test2019@gmail.com&amp;mac=<span class="hljs-number">00016</span>C06A629&amp;name=Aaron&amp;sexuality=male&amp;types=G23</span></span>
 </code></pre><p><strong>2) 第二步: </strong>后面<code>直接</code>拼接API密钥 <code>marvoAPI</code></p>
-<pre><code>age=<span class="hljs-number">20</span>&amp;area=America&amp;email=test2019<span class="hljs-annotation">@gmail</span>.com&amp;facebook=https:<span class="hljs-comment">//www.facebook.com/Aaron&amp;game=LOL&amp;name=Aaron&amp;sexuality=male&amp;suggest=test drive develop&amp;types=G23marvoAPI</span>
+<pre><code>age=<span class="hljs-number">20</span>&amp;area=China&amp;email=test2019<span class="hljs-annotation">@gmail</span>.com&amp;facebook=https:<span class="hljs-comment">//www.facebook.com/Aaron&amp;game=NBA2K18&amp;mac=00016C06A629&amp;name=Aaron&amp;sexuality=male&amp;suggest=test drive develop&amp;types=G23marvoAPI</span>
 </code></pre><p><strong>3) 第三步: </strong> <code>md5</code> 加密,取<code>32位小写</code> 得到 
 <a href="https://md5jiami.51240.com/（在线md5工具）">https://md5jiami.51240.com/（在线md5工具）</a></p>
-<pre><code>9db91116beaec4e3f53818b7d9338663
+<pre><code>ccbb6149af23fb96d4ce530833aaa4d7
 </code></pre><p><strong>4) 第四步: </strong></p>
 <ul>
 <li><p><strong>GET方式 (拼接url)</strong></p>
-<pre><code><span class="hljs-symbol">http:</span>/<span class="hljs-regexp">/118.24.105.214:8080/v</span>1/driver_survey/?age=<span class="hljs-number">20</span>&amp;area=<span class="hljs-constant">America</span>&amp;email=test2019<span class="hljs-variable">@gmail</span>.com&amp;facebook=<span class="hljs-symbol">https:</span>/<span class="hljs-regexp">/www.facebook.com/</span><span class="hljs-constant">Aaron</span>&amp;game=<span class="hljs-constant">LOL</span>&amp;name=<span class="hljs-constant">Aaron</span>&amp;sexuality=male&amp;suggest=test drive develop&amp;types=<span class="hljs-constant">G23</span>&amp;sign=<span class="hljs-number">9</span>db91116beaec4e3f53818b7d9338663
+<pre><code><span class="hljs-symbol">http:</span>/<span class="hljs-regexp">/118.24.105.214:8080/v</span>1/driver_survey/?age=<span class="hljs-number">20</span>&amp;area=<span class="hljs-constant">China</span>&amp;email=test2019<span class="hljs-variable">@gmail</span>.com&amp;facebook=<span class="hljs-symbol">https:</span>/<span class="hljs-regexp">/www.facebook.com/</span><span class="hljs-constant">Aaron</span>&amp;game=<span class="hljs-constant">NBA2K18</span>&amp;mac=<span class="hljs-number">00016</span>C06A629&amp;name=<span class="hljs-constant">Aaron</span>&amp;sexuality=male&amp;suggest=test drive develop&amp;types=<span class="hljs-constant">G23</span>&amp;sign=ccbb6149af23fb96d4ce530833aaa4d7
 </code></pre></li>
 <li><p><strong>POST方式 (把 <code>Sign</code> 放到 <code>json</code> 中 得到最终数据)</strong> </p>
 <pre><code>{
-"<span class="hljs-attribute">age</span>": <span class="hljs-value"><span class="hljs-string">"20"</span></span>,
-"<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"test2019@gmail.com"</span></span>,
-"<span class="hljs-attribute">facebook</span>":<span class="hljs-value"><span class="hljs-string">"https://www.facebook.com/Aaron"</span></span>,
-"<span class="hljs-attribute">game</span>": <span class="hljs-value"><span class="hljs-string">"LOL"</span></span>,
-"<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Aaron"</span></span>,
-"<span class="hljs-attribute">area</span>": <span class="hljs-value"><span class="hljs-string">"America"</span></span>,
-"<span class="hljs-attribute">sexuality</span>": <span class="hljs-value"><span class="hljs-string">"male"</span></span>,
-"<span class="hljs-attribute">sign</span>": <span class="hljs-value"><span class="hljs-string">"9db91116beaec4e3f53818b7d9338663"</span></span>,
-"<span class="hljs-attribute">suggest</span>": <span class="hljs-value"><span class="hljs-string">"test drive develop"</span></span>,
-"<span class="hljs-attribute">types</span>" : <span class="hljs-value"><span class="hljs-string">"G23"</span>
+  "<span class="hljs-attribute">mac</span>":<span class="hljs-value"><span class="hljs-string">"00016C06A629"</span></span>,
+  "<span class="hljs-attribute">sexuality</span>":<span class="hljs-value"><span class="hljs-string">"male"</span></span>,
+  "<span class="hljs-attribute">age</span>":<span class="hljs-value"><span class="hljs-string">"20"</span></span>,
+  "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Aaron"</span></span>,
+  "<span class="hljs-attribute">area</span>":<span class="hljs-value"><span class="hljs-string">"China"</span></span>,
+  "<span class="hljs-attribute">email</span>":<span class="hljs-value"><span class="hljs-string">"test2019@gmail.com"</span></span>,
+  "<span class="hljs-attribute">game</span>":<span class="hljs-value"><span class="hljs-string">"NBA2K18"</span></span>,
+  "<span class="hljs-attribute">suggest</span>":<span class="hljs-value"><span class="hljs-string">"test drive develop"</span></span>,
+  "<span class="hljs-attribute">facebook</span>":<span class="hljs-value"><span class="hljs-string">"https://www.facebook.com/Aaron"</span></span>,
+  "<span class="hljs-attribute">types</span>":<span class="hljs-value"><span class="hljs-string">"G23"</span></span>,
+  "<span class="hljs-attribute">sign</span>":<span class="hljs-value"><span class="hljs-string">"ccbb6149af23fb96d4ce530833aaa4d7"</span>
 </span>}
 </code></pre></li>
 </ul>
@@ -873,6 +884,11 @@ blockquote {
 <pre><code>{
     "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">1002</span></span>,
     "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Email Must be a valid email address"</span> // 不同的字段其错误消息不同
+</span>}
+</code></pre><p>3) <strong>数据更新错误</strong></p>
+<pre><code>{
+    "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">1003</span></span>,
+    "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"update fail"</span> 
 </span>}
 </code></pre><h3 id="6-">6) 请求返回结果参数说明:</h3>
 <table>
